@@ -39,17 +39,13 @@ app.post("/signup", (req, res) => {
 
 app.post("/signin", (req, res) => {
   const existingUser = users.find((user) => {
-    return user.username === req.body.username;
+    return (
+      user.username === req.body.username && user.password === req.body.password
+    );
   });
-
   if (!existingUser) {
     return res.status(404).json({
-      message: "User not found. Please sign up first.",
-    });
-  }
-  if (existingUser.password !== req.body.password) {
-    return res.status(400).json({
-      message: "Wrong password.",
+      message: "Invalid username or password.",
     });
   }
   const token = generateToken(64);
