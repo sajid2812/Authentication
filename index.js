@@ -15,30 +15,34 @@ app.post("/signup", (req, res) => {
       message: "User already exists, please sign in.",
     });
   }
-  const token = "sdfksfhsdff94df";
   users.push({
     username: req.body.username,
     password: req.body.password,
-    token: token,
   });
+  const token = Math.random() + "sdfksfhsdff94df";
   return res.status(200).json({
     token,
   });
 });
 
 app.post("/signin", (req, res) => {
-  if (!users[req.body.username]) {
+  const existingUser = users.find((user) => {
+    return user.username === req.body.username;
+  });
+
+  if (!existingUser) {
     return res.status(404).json({
       message: "User not found. Please sign up first.",
     });
   }
-  if (users[req.body.username].password !== req.body.password) {
+  if (existingUser.password !== req.body.password) {
     return res.status(400).json({
       message: "Wrong password.",
     });
   }
+  const token = Math.random() + "sdfksfhsdff94df";
   return res.status(200).json({
-    token: users[req.body.username].token,
+    token,
   });
 });
 
