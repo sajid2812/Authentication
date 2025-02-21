@@ -27,11 +27,12 @@ app.post("/signup", (req, res) => {
       message: "User already exists, please sign in.",
     });
   }
+  const token = generateToken(64);
   users.push({
     username: req.body.username,
     password: req.body.password,
+    token: token,
   });
-  const token = generateToken(64);
   return res.status(200).json({
     token,
   });
@@ -44,13 +45,35 @@ app.post("/signin", (req, res) => {
     );
   });
   if (!existingUser) {
-    return res.status(404).json({
+    return res.status(400).json({
       message: "Invalid username or password.",
     });
   }
   const token = generateToken(64);
+  existingUser.token = token;
   return res.status(200).json({
     token,
+  });
+});
+
+app.get("/user-profile", (req, res) => {
+  const token = req.headers.token;
+  if (!token) {
+    return res.status(400).json({
+      message: "Missing token in header.",
+    });
+  }
+  const existingUser = users.find((user) => {
+    return user.token === token;
+  });
+  if (!existingUser) {
+    return res.status(404).json({
+      message: "Invalid token.",
+    });
+  }
+  return res.status(200).json({
+    username: existingUser.username,
+    password: existingUser.password,
   });
 });
 
