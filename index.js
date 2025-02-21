@@ -4,20 +4,23 @@ const app = express();
 
 app.use(express.json());
 
-let users = {};
+let users = [];
 
 app.post("/signup", (req, res) => {
-  if (users[req.body.username]) {
+  const existingUser = users.find((user) => {
+    return user.username === req.body.username;
+  });
+  if (existingUser) {
     return res.status(400).json({
       message: "User already exists, please sign in.",
     });
   }
   const token = "sdfksfhsdff94df";
-  users[req.body.username] = {
+  users.push({
     username: req.body.username,
     password: req.body.password,
     token: token,
-  };
+  });
   return res.status(200).json({
     token,
   });
