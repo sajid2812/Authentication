@@ -6,6 +6,18 @@ app.use(express.json());
 
 let users = [];
 
+function generateToken(length) {
+  const alphaNumeric =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let token = "";
+  for (let i = 0; i < length; i++) {
+    token += alphaNumeric.charAt(
+      Math.floor(Math.random() * alphaNumeric.length)
+    );
+  }
+  return token;
+}
+
 app.post("/signup", (req, res) => {
   const existingUser = users.find((user) => {
     return user.username === req.body.username;
@@ -19,7 +31,7 @@ app.post("/signup", (req, res) => {
     username: req.body.username,
     password: req.body.password,
   });
-  const token = Math.random() + "sdfksfhsdff94df";
+  const token = generateToken(64);
   return res.status(200).json({
     token,
   });
@@ -40,7 +52,7 @@ app.post("/signin", (req, res) => {
       message: "Wrong password.",
     });
   }
-  const token = Math.random() + "sdfksfhsdff94df";
+  const token = generateToken(64);
   return res.status(200).json({
     token,
   });
