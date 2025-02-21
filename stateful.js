@@ -67,7 +67,7 @@ app.get("/user-profile", (req, res) => {
     return user.token === token;
   });
   if (!existingUser) {
-    return res.status(404).json({
+    return res.status(400).json({
       message: "Invalid token.",
     });
   }
