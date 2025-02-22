@@ -1,0 +1,157 @@
+<html>
+  <head>
+    <title>User Authentication</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.1/axios.min.js"></script>
+    <script>
+      async function signUp() {
+        const username = document.getElementById("signup-username").value;
+        const password = document.getElementById("signup-password").value;
+        document.getElementById("signup-username").value = "";
+        document.getElementById("signup-password").value = "";
+        const response = await axios.post("http://localhost:8080/signup", {
+          username: username,
+          password: password,
+        });
+        localStorage.setItem("auth-token", response.data.token);
+        getUserProfile();
+      }
+      async function signIn() {
+        const username = document.getElementById("signin-username").value;
+        const password = document.getElementById("signin-password").value;
+        document.getElementById("signin-username").value = "";
+        document.getElementById("signin-password").value = "";
+        const response = await axios.post("http://localhost:8080/signin", {
+          username: username,
+          password: password,
+        });
+        localStorage.setItem("auth-token", response.data.token);
+        getUserProfile();
+      }
+      async function getUserProfile() {
+        const response = await axios.get("http://localhost:8080/user-profile", {
+          headers: {
+            token: localStorage.getItem("auth-token"),
+          },
+        });
+        const usernameELm = document.createElement("p");
+        usernameELm.innerHTML = response.data.username;
+        const passwordELm = document.createElement("p");
+        passwordELm.innerHTML = response.data.password;
+        document.getElementById("user-info").append(usernameELm, passwordELm);
+      }
+      function logout() {
+        localStorage.removeItem("auth-token");
+        document.getElementById("user-info").innerHTML = "";
+      }
+    </script>
+  </head>
+  <body
+    style="
+      background: #0b2447;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    "
+  >
+    <div
+      style="
+        background: #19376d;
+        text-align: center;
+        border: none;
+        border-radius: 5px;
+      "
+    >
+      <h2 style="color: #ffffff; padding: 16px 16px 0">User Authentication</h2>
+      <div style="padding: 16px">
+        <input
+          style="
+            background: #a5d7e8;
+            padding: 12px;
+            border-radius: 5px;
+            border: none;
+          "
+          type="text"
+          id="signup-username"
+          placeholder="username"
+        />
+        <input
+          style="
+            background: #a5d7e8;
+            padding: 12px;
+            border-radius: 5px;
+            border: none;
+          "
+          type="password"
+          id="signup-password"
+          placeholder="password"
+        />
+        <button
+          style="
+            padding: 12px;
+            background: #576cbc;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+          "
+          onclick="signUp()"
+        >
+          Signup
+        </button>
+      </div>
+      <div style="padding: 16px">
+        <input
+          style="
+            background: #a5d7e8;
+            padding: 12px;
+            border-radius: 5px;
+            border: none;
+          "
+          type="text"
+          id="signin-username"
+          placeholder="username"
+        />
+        <input
+          style="
+            background: #a5d7e8;
+            padding: 12px;
+            border-radius: 5px;
+            border: none;
+          "
+          type="password"
+          id="signin-password"
+          placeholder="password"
+        />
+        <button
+          style="
+            padding: 12px;
+            background: #576cbc;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+          "
+          onclick="signIn()"
+        >
+          SignIn
+        </button>
+      </div>
+      <div style="padding: 16px">
+        <button
+          style="
+            padding: 12px;
+            background: #576cbc;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+          "
+          onclick="logout()"
+        >
+          Logout
+        </button>
+      </div>
+      <div id="user-info"></div>
+    </div>
+  </body>
+</html>
