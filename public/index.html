@@ -8,7 +8,7 @@
         const password = document.getElementById("signup-password").value;
         document.getElementById("signup-username").value = "";
         document.getElementById("signup-password").value = "";
-        const response = await axios.post("http://localhost:8080/signup", {
+        const response = await axios.post("http://localhost:3000/signup", {
           username: username,
           password: password,
         });
@@ -20,7 +20,7 @@
         const password = document.getElementById("signin-password").value;
         document.getElementById("signin-username").value = "";
         document.getElementById("signin-password").value = "";
-        const response = await axios.post("http://localhost:8080/signin", {
+        const response = await axios.post("http://localhost:3000/signin", {
           username: username,
           password: password,
         });
@@ -28,7 +28,7 @@
         getUserProfile();
       }
       async function getUserProfile() {
-        const response = await axios.get("http://localhost:8080/user-profile", {
+        const response = await axios.get("http://localhost:3000/user-profile", {
           headers: {
             token: localStorage.getItem("auth-token"),
           },

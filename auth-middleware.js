@@ -1,11 +1,9 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
-const cors = require("cors");
 
 const app = express();
 
 app.use(express.json());
-app.use(cors());
 
 function auth(req, res, next) {
   try {
@@ -26,6 +24,10 @@ function auth(req, res, next) {
 
 const JWT_SECRET = "sajidlovesspiderman";
 let users = [];
+
+app.get("/", (req, res) => {
+  res.sendFile(__dirname + "/public/index.html");
+});
 
 app.post("/signup", (req, res) => {
   const existingUser = users.find((user) => {
@@ -86,6 +88,6 @@ app.get("/user-profile", auth, (req, res) => {
   });
 });
 
-app.listen(8080, () => {
-  console.log("Server is listening on port 8080.");
+app.listen(3000, () => {
+  console.log("Server is listening on port 3000.");
 });
