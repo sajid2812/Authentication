@@ -17,5 +17,15 @@ function verifyJWT(token) {
       return false;
     }
   }
+
+  function decodeJWT(token) {
+    const decoded = jwt.decode(token);
+    return decoded ? true : false;
+  }
+  
+  signJWT();
+  console.log(verifyJWT(token));
+  console.log(decodeJWT(token));
+
   
 
