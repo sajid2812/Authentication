@@ -12,7 +12,10 @@ function auth(req, res, next) {
       return res.status(400).json({ message: "Missing token in header." });
     }
     const decodedInfo = jwt.verify(token, JWT_SECRET);
-    req.body.username = decodedInfo.username;
+    if (!decodedInfo || !decodedInfo.username) {
+      return res.status(400).json({ message: "Invalid token." });
+    }
+    req.username = decodedInfo.username;
     next();
   } catch (err) {
     return res.status(400).json({ message: "Invalid token." });
@@ -69,7 +72,7 @@ app.post("/signin", (req, res) => {
 });
 
 app.get("/user-profile", auth, (req, res) => {
-  const foundUser = users.find((user) => user.username === req.body.username);
+  const foundUser = users.find((user) => user.username === req.username);
   if (!foundUser) {
     return res.status(400).json({
       message: "Invalid token.",
